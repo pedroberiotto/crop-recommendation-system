@@ -1,0 +1,7 @@
+{
+  "model_name": "gaussian_nb",
+  "sklearn_version": "1.7.2",
+  "serialized_at": "2026-06-11T11:53:03.181569+00:00",
+  "mlflow_run_id": "bootstrap",
+  "artifact_path": "artifacts/model_v1.pkl"
+}

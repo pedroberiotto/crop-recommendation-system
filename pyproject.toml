@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "crop-reco"
+version = "2.0.0"
+description = "Crop recommendation system — pipeline, modeling and API"
+requires-python = ">=3.10"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "."]
+addopts = "-ra -q --strict-markers -p no:ddtrace"
+markers = [
+    "slow: tests that take more than 5 seconds",
+    "smoke: smoke tests that require trained artifacts",
+]

@@ -1,0 +1,7 @@
+{
+  "model_name": "random_forest",
+  "sklearn_version": "1.7.2",
+  "serialized_at": "2026-06-11T11:53:03.171314+00:00",
+  "mlflow_run_id": "afbbe34e7a164553ad77db9a0c7176e0",
+  "artifact_path": "artifacts/final_model.pkl"
+}

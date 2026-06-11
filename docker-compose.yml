@@ -1,0 +1,71 @@
+services:
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: crop-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./artifacts:/artifacts
+      - ./logs:/logs
+    environment:
+      ARTIFACTS_DIR: /artifacts
+      LOG_FILE: /logs/api.log
+      MODEL_ARTIFACT: final_model.pkl
+    restart: on-failure
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  log-reader:
+    image: busybox:1.36
+    container_name: crop-log-reader
+    volumes:
+      - ./logs:/logs:ro
+    command: sh -c "echo '[log-reader] Waiting for API logs...'; while [ ! -f /logs/api.log ]; do sleep 1; done; tail -f /logs/api.log"
+    depends_on:
+      api:
+        condition: service_started
+    restart: on-failure
+
+  train:
+    build:
+      context: .
+      dockerfile: Dockerfile.train
+    container_name: crop-train
+    volumes:
+      - ./artifacts:/artifacts
+      - ./data:/app/data
+      - ./mlflow:/app/mlflow
+    environment:
+      ARTIFACTS_DIR: /artifacts
+      MLFLOW_TRACKING_URI: sqlite:////app/mlflow/mlflow.db
+    profiles:
+      - train
+
+  mlflow:
+    image: python:3.11-slim
+    container_name: crop-mlflow
+    ports:
+      - "5050:5000"
+    volumes:
+      - ./mlflow:/mlflow
+    working_dir: /mlflow
+    command: >
+      sh -c "pip install --no-cache-dir 'mlflow>=2.13' &&
+            mkdir -p /mlflow/artifacts &&
+            exec mlflow server --backend-store-uri sqlite:////mlflow/mlflow.db --default-artifact-root /mlflow/artifacts --host 0.0.0.0 --port 5000"
+    restart: on-failure
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 90s
+    profiles:
+      - tracking

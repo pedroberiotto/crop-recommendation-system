@@ -1,0 +1,5 @@
+# Git LFS — descomente as linhas abaixo se quiser versionar
+# modelos serializados via Git LFS. Lembre de remover *.pkl
+# do .gitignore antes e rodar `git lfs install`.
+#
+# *.pkl filter=lfs diff=lfs merge=lfs -text

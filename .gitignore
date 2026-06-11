@@ -1,0 +1,53 @@
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+.eggs/
+build/
+dist/
+.Python
+
+# ---------- Ambientes virtuais ----------
+.venv/
+venv/
+env/
+
+# ---------- Testes / lint ----------
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.mypy_cache/
+.ruff_cache/
+
+# ---------- Notebooks ----------
+.ipynb_checkpoints/
+
+# ---------- IDEs / OS ----------
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# ---------- Dataset (baixe via `make download`) ----------
+data/raw/*.csv
+
+# ---------- Modelos serializados ----------
+# *.pkl é grande para git padrão. Use Git LFS se quiser versionar
+# (veja .gitattributes) ou treine localmente com `make train`.
+*.pkl
+
+# ---------- MLflow ----------
+mlflow/*.db
+mlflow/artifacts/
+mlruns/*
+!mlruns/.gitkeep
+
+# ---------- Logs em runtime ----------
+logs/*.log
+
+# ---------- Variáveis de ambiente ----------
+.env
+.env.local
